@@ -1,0 +1,35 @@
+version: '3.5'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: taskmngr_mongo_container
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: taskmanager
+    volumes:
+      - mongodata:/data/db
+
+  postgres:
+    image: postgres:latest
+    container_name: taskmngr_postgres_container
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: taskmanager
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+
+  redis:
+    image: redis:latest
+    container_name: taskmngr_redis_container
+    ports:
+      - '6379:6379'
+
+volumes:
+  postgres:
+  mongodata:
