@@ -11,11 +11,13 @@ datasource db {
 }
 
 model User {
-  id            String  @id @default(uuid())
+  id            String   @id @default(uuid())
   name          String
   email         String
   password_hash String
-  tasks         Tasks[]
+  Tasks         Tasks[]
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }
 
 model Tasks {
@@ -26,5 +28,6 @@ model Tasks {
   userId       String?
   completed    Boolean  @default(false)
   created_at   DateTime @default(now())
-  completed_at DateTime
+  updated_at   DateTime @updatedAt
+  completed_at String
 }

@@ -1,4 +1,4 @@
-export interface createTaskDTO {
+export interface CreateTaskDTO {
   description: string;
   time: number;
   completed: boolean;
