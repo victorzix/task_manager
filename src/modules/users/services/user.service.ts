@@ -1,6 +1,8 @@
 import { type UserServiceInterface } from './user.service.interface';
 import { type UserRepositoryInterface } from '../repositories/user.repository.interface';
 import { type CreateUserDTO, type User } from '../dtos';
+import { BadRequestError } from 'src/errors/bad-request-error';
+import { NotFoundError } from 'src/errors/not-found-error';
 
 export class UserService implements UserServiceInterface {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
@@ -8,10 +10,10 @@ export class UserService implements UserServiceInterface {
   async create(dto: CreateUserDTO): Promise<User> {
     const emailAlreadyExists = await this.userRepository.findByEmail(dto.email);
 
-    if (emailAlreadyExists) throw new Error('Email already registered');
+    if (emailAlreadyExists) throw new BadRequestError('Email already registered');
 
     const user = await this.userRepository.create(dto);
-    if (!user) throw new Error('Could not create');
+    if (!user) throw new NotFoundError('Could not create');
 
     return user;
   }
@@ -19,7 +21,7 @@ export class UserService implements UserServiceInterface {
   async changeName(id: string, newName: string): Promise<User> {
     const user = await this.userRepository.update(id, { name: newName });
 
-    if (!user) throw new Error('Could not find user');
+    if (!user) throw new NotFoundError('Could not find user');
 
     return user;
   }
@@ -29,7 +31,7 @@ export class UserService implements UserServiceInterface {
       password: newPassword,
     });
 
-    if (!user) throw new Error('Could not find user');
+    if (!user) throw new NotFoundError('Could not find user');
 
     return user;
   }
@@ -37,7 +39,7 @@ export class UserService implements UserServiceInterface {
   async delete(id: string): Promise<User> {
     const user = await this.userRepository.delete(id);
 
-    if (!user) throw new Error('Could not find user');
+    if (!user) throw new NotFoundError('Could not find user');
 
     return user;
   }
