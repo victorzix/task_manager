@@ -1,30 +1,17 @@
-import express, { type Application, Router } from 'express';
-import { type Server as HttpServer } from 'http';
+import express from 'express';
+import UserModule from 'src/modules/users/user.module';
 
-export class App {
-  public app: Application;
-  public server: HttpServer | undefined;
-  private readonly router: Router;
 
-  constructor() {
-    this.app = express();
-    this.router = Router();
-  }
+const app = express();
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use('/users')
 
-  start(): void {
-    this.server = this.app.listen(process.env.PORT);
-    this.middlewares();
-  }
 
-  stop(fn?: () => void): void {
-    if (!this.server) return;
-    this.server.close(fn);
-  }
 
-  middlewares(): void {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({extended: true}));
-  }
-}
+app.listen(process.env.PORT, () =>{
+  console.log("Listening on", process.env.PORT)
+});
 
-export default new App();
+
+export default app;
