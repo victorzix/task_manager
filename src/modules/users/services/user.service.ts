@@ -13,7 +13,7 @@ export class UserService implements UserServiceInterface {
     if (emailAlreadyExists) throw new BadRequestError('Email already registered');
 
     const user = await this.userRepository.create(dto);
-    if (!user) throw new NotFoundError('Could not create');
+    if (!user) throw new BadRequestError('Could not create');
 
     return user;
   }
