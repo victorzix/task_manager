@@ -13,7 +13,6 @@ export class UserController implements UserControllerInterface {
     next: NextFunction,
   ): Promise<Response> {
     try {
-      console.log(req.body)
       const user = await this.userService.create(req.body);
       return res.status(StatusCodes.CREATED).json({
         data: user,
@@ -24,7 +23,7 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: error.message });
+          .json({ errors: error.message });
       }
       return res.status(500).json('An error ocurred');
     }
@@ -47,7 +46,7 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: error.message });
+          .json({ errors: error.message });
       }
       return res.status(500).json('An error ocurred');
     }
@@ -70,7 +69,7 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: error.message });
+          .json({ errors: error.message });
       }
       return res.status(500).json('An error ocurred');
     }
@@ -94,7 +93,7 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: error.message });
+          .json({ errors: error.message });
       }
       return res.status(500).json('An error ocurred');
     }
