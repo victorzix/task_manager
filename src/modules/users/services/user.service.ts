@@ -4,8 +4,9 @@ import { type CreateUserDTO, type User } from '../dtos';
 import { BadRequestError } from 'src/errors/bad-request-error';
 import { NotFoundError } from 'src/errors/not-found-error';
 import isObjEmpty from 'src/utils/isObjEmpty';
-import { UserSchema } from 'src/utils/validator';
+import { UserSchema } from 'src/modules/users/schemas/create-user-schema.ts';
 import { ForbiddenError } from 'src/errors/forbidden-error';
+import generateHashPassword from '../utils/password-hasher';
 
 export class UserService implements UserServiceInterface {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
@@ -27,16 +28,21 @@ export class UserService implements UserServiceInterface {
         for (const error of validationResult.error.issues) {
           validationErrors.push(error.message);
         }
-      throw new ForbiddenError(`${validationErrors.join(', ')}`);
+        throw new ForbiddenError(`${validationErrors.join(', ')}`);
+      }
     }
-  }
 
     const emailAlreadyExists = await this.userRepository.findByEmail(dto.email);
 
     if (emailAlreadyExists)
       throw new BadRequestError('Email already registered');
 
-    const user = await this.userRepository.create(dto);
+
+    const password_hash = await generateHashPassword(dto.password_hash)
+    const user = await this.userRepository.create({
+      ...dto,
+      password_hash
+    });
     if (!user) throw new BadRequestError('Could not create');
 
     return user;
