@@ -3,14 +3,24 @@ import { type UserRepositoryInterface } from '../repositories/user.repository.in
 import { type CreateUserDTO, type User } from '../dtos';
 import { BadRequestError } from 'src/errors/bad-request-error';
 import { NotFoundError } from 'src/errors/not-found-error';
+import isObjEmpty from 'src/utils/isObjEmpty';
 
 export class UserService implements UserServiceInterface {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
 
   async create(dto: CreateUserDTO): Promise<User> {
+    const isEmpty = isObjEmpty(dto);
+
+    if (isEmpty) {
+      throw new BadRequestError(
+        'At least one field is required to create an user',
+      );
+    }
+
     const emailAlreadyExists = await this.userRepository.findByEmail(dto.email);
 
-    if (emailAlreadyExists) throw new BadRequestError('Email already registered');
+    if (emailAlreadyExists)
+      throw new BadRequestError('Email already registered');
 
     const user = await this.userRepository.create(dto);
     if (!user) throw new BadRequestError('Could not create');
