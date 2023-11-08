@@ -6,7 +6,7 @@ import { NotFoundError } from 'src/errors/not-found-error';
 import isObjEmpty from 'src/utils/isObjEmpty';
 import { UserSchema } from 'src/modules/users/schemas/create-user-schema.ts';
 import { ForbiddenError } from 'src/errors/forbidden-error';
-import generateHashPassword from '../utils/password-hasher';
+import generateHashPassword from '../../../utils/password-hasher';
 
 export class UserService implements UserServiceInterface {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
@@ -14,7 +14,6 @@ export class UserService implements UserServiceInterface {
   async create(dto: CreateUserDTO): Promise<User> {
     const isEmpty = isObjEmpty(dto);
     const validationErrors: String[] = [];
-
     if (isEmpty) {
       throw new BadRequestError(
         'At least one field is required to create an user',
@@ -37,14 +36,12 @@ export class UserService implements UserServiceInterface {
     if (emailAlreadyExists)
       throw new BadRequestError('Email already registered');
 
-
-    const password_hash = await generateHashPassword(dto.password_hash)
+    const password_hash = await generateHashPassword(dto.password_hash);
     const user = await this.userRepository.create({
       ...dto,
-      password_hash
+      password_hash,
     });
     if (!user) throw new BadRequestError('Could not create');
-
     return user;
   }
 
