@@ -5,7 +5,7 @@ export class Server {
   private readonly app;
   private readonly database: DatabaseType;
 
-  constructor(){
+  constructor() {
     this.app = app;
     this.database = Database;
   }
