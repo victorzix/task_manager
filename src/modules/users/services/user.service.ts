@@ -4,7 +4,7 @@ import { type CreateUserDTO, type User } from '../dtos';
 import { BadRequestError } from 'src/errors/bad-request-error';
 import { NotFoundError } from 'src/errors/not-found-error';
 import isObjEmpty from 'src/utils/isObjEmpty';
-import { UserSchema } from 'src/modules/users/schemas/create-user-schema.ts';
+import { UserSchema } from 'src/modules/users/schemas/user.schema';
 import { ForbiddenError } from 'src/errors/forbidden-error';
 import generateHashPassword from '../../../utils/password-hasher';
 
