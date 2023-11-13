@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AuthenticationControllerInterface } from '../controllers/authentication.controller.interface';
-import { checkAuth } from 'src/modules/middlewares/checkAuth';
+import { checkAuth } from 'src/middlewares/checkAuth';
 
 const router = Router();
 
