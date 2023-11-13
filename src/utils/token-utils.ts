@@ -1,4 +1,8 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+
+interface TokenPayload extends JwtPayload {
+  id: string;
+}
 
 export class TokenUtils {
   generateAccessToken(userId: string): string {
@@ -22,7 +26,7 @@ export class TokenUtils {
   verifyToken(token: string) {
     try {
       const verify = jwt.verify(token, process.env.JWT_SECRET as string);
-      return verify;
+      return verify as TokenPayload;
     } catch (err: any) {
       return null;
     }
