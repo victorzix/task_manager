@@ -6,12 +6,7 @@ export interface UserControllerInterface {
     res: Response,
     next: NextFunction,
   ) => Promise<Response>;
-  changeName: (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => Promise<Response>;
-  changePassword: (
+  updateUser: (
     req: Request,
     res: Response,
     next: NextFunction,

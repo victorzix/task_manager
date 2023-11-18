@@ -19,7 +19,6 @@ export class UserController implements UserControllerInterface {
         status: StatusCodes.CREATED,
       });
     } catch (error: any) {
-      next(error);
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -29,43 +28,20 @@ export class UserController implements UserControllerInterface {
     }
   }
 
-  async changeName(
+  async updateUser(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<Response> {
     try {
-      const { id, newName } = req.body;
-      const user = await this.userService.changeName(id, newName);
+      const id = req.app.locals.userId;
+      const updateData = req.body;
+      const user = await this.userService.updateUser(id, updateData);
       return res.status(StatusCodes.OK).json({
         data: user,
         status: StatusCodes.OK,
       });
     } catch (error) {
-      next(error);
-      if (error instanceof AppError) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ errors: error.message });
-      }
-      return res.status(500).json('An error ocurred');
-    }
-  }
-
-  async changePassword(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response> {
-    try {
-      const { id, newPassword } = req.body;
-      const user = await this.userService.changePassword(id, newPassword);
-      return res.status(StatusCodes.OK).json({
-        data: user,
-        status: StatusCodes.OK,
-      });
-    } catch (error) {
-      next(error);
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -81,7 +57,7 @@ export class UserController implements UserControllerInterface {
     next: NextFunction,
   ): Promise<Response> {
     try {
-      const { id } = req.body;
+      const id = req.app.locals.userId;
       const user = await this.userService.delete(id);
 
       return res.status(StatusCodes.OK).json({
@@ -89,7 +65,6 @@ export class UserController implements UserControllerInterface {
         status: StatusCodes.OK,
       });
     } catch (error) {
-      next(error);
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
