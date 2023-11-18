@@ -23,11 +23,11 @@ model User {
 model Tasks {
   id               String   @id @default(uuid())
   description      String
-  time_to_complete Float
+  time_to_complete DateTime
   User             User?    @relation(fields: [user_id], references: [id])
   user_id          String
   completed        Boolean  @default(false)
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
-  completed_at     String
+  completed_at     String?
 }
