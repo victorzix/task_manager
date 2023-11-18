@@ -1,10 +1,10 @@
 import { type UserServiceInterface } from './user.service.interface';
 import { type UserRepositoryInterface } from '../repositories/user.repository.interface';
-import { type CreateUserDTO, type User } from '../dtos';
+import { type UpdateUserDTO, type CreateUserDTO, type User } from '../dtos';
 import { BadRequestError } from 'src/errors/bad-request-error';
 import { NotFoundError } from 'src/errors/not-found-error';
 import isObjEmpty from 'src/utils/isObjEmpty';
-import { UserSchema } from 'src/modules/users/schemas/user.schema';
+import { UpdateUserSchema, UserSchema } from 'src/modules/users/schemas/user.schema';
 import { ForbiddenError } from 'src/errors/forbidden-error';
 import generateHashPassword from '../../../utils/password-hasher';
 
@@ -45,22 +45,48 @@ export class UserService implements UserServiceInterface {
     return user;
   }
 
-  async changeName(id: string, newName: string): Promise<User> {
-    const user = await this.userRepository.update(id, { name: newName });
+  async updateUser(id: string, dto: UpdateUserDTO) {
+    const isEmpty = isObjEmpty(dto);
+    const validationErrors: String[] = [];
 
-    if (!user) throw new NotFoundError('Could not find user');
+    if (isEmpty) {
+      throw new BadRequestError(
+        `At least one field is required to update an user`,
+      );
+    }
+
+    if (dto.email) {
+      await this.handleUpdateEmail(dto.email);
+    }
+    if(dto.password) {
+      dto.password = await generateHashPassword(dto.password);
+    }
+
+    const validationResult = UpdateUserSchema.safeParse(dto);
+
+    if (!validationResult.success) {
+      if (!validationResult.success) {
+        for (const error of validationResult.error.issues) {
+          validationErrors.push(error.message);
+        }
+        throw new BadRequestError(`${validationErrors.join(', ')}`);
+      }
+    }
+
+    const user = await this.userRepository.update(id, dto);
+
+    if (!user) {
+      throw new NotFoundError('Could not find user');
+    }
 
     return user;
   }
 
-  async changePassword(id: string, newPassword: string): Promise<User> {
-    const user = await this.userRepository.update(id, {
-      password: newPassword,
-    });
-
-    if (!user) throw new NotFoundError('Could not find user');
-
-    return user;
+  private async handleUpdateEmail(email: string) {
+    const emailAlreadyExists = await this.userRepository.findByEmail(email);
+    if (emailAlreadyExists) {
+      throw new BadRequestError('Email already exists');
+    }
   }
 
   async delete(id: string): Promise<User> {
