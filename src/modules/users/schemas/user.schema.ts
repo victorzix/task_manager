@@ -17,5 +17,5 @@ export const UpdateUserSchema = z.object({
   email: z.string().email('A valid email must be provided').optional(),
   password: z
     .string()
-    .min(8, { message: 'password must have at least 8 caracters' }),
+    .min(8, { message: 'password must have at least 8 caracters' }).optional(),
 });
