@@ -1,7 +1,6 @@
 export interface CreateTaskDTO {
   description: string;
-  userId: string;
-  time: number;
-  completed: boolean;
+  user_id: string;
+  time_to_complete: Date;
   completed_at: string;
 }
