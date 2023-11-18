@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 interface TokenPayload extends JwtPayload {
-  id: string;
+  userId: string;
 }
 
 export class TokenUtils {
