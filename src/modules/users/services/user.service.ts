@@ -36,10 +36,10 @@ export class UserService implements UserServiceInterface {
     if (emailAlreadyExists)
       throw new BadRequestError('Email already registered');
 
-    const password_hash = await generateHashPassword(dto.password_hash);
+    const hashedPass = await generateHashPassword(dto.password);
     const user = await this.userRepository.create({
       ...dto,
-      password_hash,
+      password: hashedPass,
     });
     if (!user) throw new BadRequestError('Could not create');
     return user;
