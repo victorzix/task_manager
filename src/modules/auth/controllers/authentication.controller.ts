@@ -20,7 +20,7 @@ export class AuthenticationController
       throw new BadRequestError('Invalid e-mail or password');
     }
 
-    const validPass = await bcrypt.compare(password, user.password_hash);
+    const validPass = await bcrypt.compare(password, user.password);
 
     if (!validPass) {
       throw new BadRequestError('Invalid e-mail or password');
