@@ -5,5 +5,5 @@ export interface Task {
   time_to_complete: Date;
   completed: boolean;
   created_at: Date;
-  completed_at: string;
+  completed_at: string | null;
 }
