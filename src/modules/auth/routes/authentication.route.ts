@@ -8,12 +8,10 @@ export class AuthenticationRouter {
   public routes: Router[] = [];
   constructor(
     private readonly authenticationController: AuthenticationControllerInterface,
-  ) {
-    this.routes.push(
-      router.post(
-        '/login',
-        this.authenticationController.login.bind(authenticationController),
-      ),
+    ) {
+      this.routes.push(router.post('/logout', checkAuth, this.authenticationController.logout.bind(authenticationController)))
+      this.routes.push(router.post('/login', this.authenticationController.login.bind(authenticationController)),
+      
     );
   }
 
