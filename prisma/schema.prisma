@@ -24,7 +24,7 @@ model Tasks {
   id               String   @id @default(uuid())
   description      String
   time_to_complete DateTime
-  User             User?    @relation(fields: [user_id], references: [id])
+  User             User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id          String
   completed        Boolean  @default(false)
   created_at       DateTime @default(now())
