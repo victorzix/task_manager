@@ -7,6 +7,7 @@ import isObjEmpty from 'src/utils/isObjEmpty';
 import { UpdateUserSchema, UserSchema } from 'src/modules/users/schemas/user.schema';
 import { ForbiddenError } from 'src/errors/forbidden-error';
 import generateHashPassword from '../../../utils/password-hasher';
+import { InternalServerError } from 'src/errors/internal-server-error';
 
 export class UserService implements UserServiceInterface {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
@@ -41,7 +42,7 @@ export class UserService implements UserServiceInterface {
       ...dto,
       password: hashedPass,
     });
-    if (!user) throw new BadRequestError('Could not create');
+    if (!user) throw new InternalServerError('Could not create');
     return user;
   }
 

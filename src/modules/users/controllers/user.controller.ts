@@ -27,7 +27,10 @@ export class UserController implements UserControllerInterface {
             status: StatusCodes.BAD_REQUEST 
           });
       }
-      return res.status(500).json('An error ocurred');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: error.message,
+        status: StatusCodes.INTERNAL_SERVER_ERROR
+      });
     }
   }
 
@@ -44,7 +47,7 @@ export class UserController implements UserControllerInterface {
         data: user,
         status: StatusCodes.OK,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -53,7 +56,10 @@ export class UserController implements UserControllerInterface {
             status: StatusCodes.BAD_REQUEST
           });
       }
-      return res.status(500).json('An error ocurred');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: error.message,
+        status: StatusCodes.INTERNAL_SERVER_ERROR
+      });
     }
   }
 
@@ -70,7 +76,7 @@ export class UserController implements UserControllerInterface {
         data: user,
         status: StatusCodes.OK,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
@@ -79,7 +85,10 @@ export class UserController implements UserControllerInterface {
             status: StatusCodes.BAD_REQUEST
           });
       }
-      return res.status(500).json('An error ocurred');
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: error.message,
+        status: StatusCodes.INTERNAL_SERVER_ERROR
+      });
     }
   }
 }
