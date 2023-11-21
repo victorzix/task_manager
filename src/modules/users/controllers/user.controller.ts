@@ -22,7 +22,10 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ errors: error.message });
+          .json({
+            errors: error.message,
+            status: StatusCodes.BAD_REQUEST 
+          });
       }
       return res.status(500).json('An error ocurred');
     }
@@ -45,7 +48,10 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ errors: error.message });
+          .json({ 
+            errors: error.message,
+            status: StatusCodes.BAD_REQUEST
+          });
       }
       return res.status(500).json('An error ocurred');
     }
@@ -68,7 +74,10 @@ export class UserController implements UserControllerInterface {
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ errors: error.message });
+          .json({ 
+            errors: error.message,
+            status: StatusCodes.BAD_REQUEST
+          });
       }
       return res.status(500).json('An error ocurred');
     }
