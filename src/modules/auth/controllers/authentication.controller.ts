@@ -1,43 +1,42 @@
 import { Request, Response } from 'express';
 import { AuthenticationControllerInterface } from './authentication.controller.interface';
-import { UserRepositoryInterface } from 'src/modules/users/repositories/user.repository.interface';
-import bcrypt from 'bcrypt';
-import { BadRequestError } from 'src/errors/bad-request-error';
-import TokenUtils from 'src/utils/token-utils';
 import { StatusCodes } from 'http-status-codes';
 import { createAccessCookie, createRefreshCookie } from 'src/utils/sendCookies';
+import { AuthenticationServiceInterface } from '../services/authentication.service.interface';
+import { AppError } from 'src/errors/app-error';
 
 export class AuthenticationController
   implements AuthenticationControllerInterface
 {
-  constructor(private readonly userRepository: UserRepositoryInterface) {}
+  constructor(private readonly authenticationService: AuthenticationServiceInterface) {}
 
   async login(req: Request, res: Response): Promise<Response> {
-    const { email, password } = req.body;
-    const user = await this.userRepository.findByEmail(email);
-
-    if (!user) {
-      throw new BadRequestError('Invalid e-mail or password');
-    }
-
-    const validPass = await bcrypt.compare(password, user.password);
-
-    if (!validPass) {
-      throw new BadRequestError('Invalid e-mail or password');
-    }
-
-    const token = TokenUtils.generateAccessToken(user.id);
-    const refreshToken = TokenUtils.generateRefreshToken(user.id);
-
-    await createAccessCookie(res, token);
-    await createRefreshCookie(res, refreshToken);
+    try {
+      const user = await this.authenticationService.login(req.body)
   
-    return res.status(200).json({
-      status: StatusCodes.OK,
-    });
+      await createAccessCookie(res, user.token);
+      await createRefreshCookie(res, user.refreshToken);
+    
+      return res.status(StatusCodes.OK).json({
+        status: StatusCodes.OK,
+      });
+    } catch(error: any) {
+      console.log(error)
+      if (error instanceof AppError) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ errors: error.message });
+      }
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json('An error ocurred');
+    }
   }
 
   async logout(req: Request, res: Response): Promise<Response> {
-    return res.json();
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    return res.status(StatusCodes.OK).json({
+      message: 'Successfully logout',
+      status: StatusCodes.OK
+    })
   }
 }
