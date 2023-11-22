@@ -22,6 +22,7 @@ model User {
 
 model Tasks {
   id               String   @id @default(uuid())
+  title            String
   description      String
   time_to_complete DateTime
   User             User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
