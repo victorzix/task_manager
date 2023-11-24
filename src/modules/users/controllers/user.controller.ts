@@ -20,16 +20,41 @@ export class UserController implements UserControllerInterface {
       });
     } catch (error: any) {
       if (error instanceof AppError) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({
-            errors: error.message,
-            status: StatusCodes.BAD_REQUEST 
-          });
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          errors: error.message,
+          status: StatusCodes.BAD_REQUEST,
+        });
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: error.message,
-        status: StatusCodes.INTERNAL_SERVER_ERROR
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+      });
+    }
+  }
+
+  async getData(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response> {
+    try {
+      const id = req.app.locals.userId;
+      const { name, email } = await this.userService.getData(id);
+
+      return res.status(StatusCodes.OK).json({
+        data: { name, email },
+        status: StatusCodes.OK,
+      });
+    } catch (error: any) {
+      if (error instanceof AppError) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          errors: error.message,
+          status: StatusCodes.BAD_REQUEST,
+        });
+      }
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: error.message,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -49,16 +74,14 @@ export class UserController implements UserControllerInterface {
       });
     } catch (error: any) {
       if (error instanceof AppError) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ 
-            errors: error.message,
-            status: StatusCodes.BAD_REQUEST
-          });
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          errors: error.message,
+          status: StatusCodes.BAD_REQUEST,
+        });
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: error.message,
-        status: StatusCodes.INTERNAL_SERVER_ERROR
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -78,16 +101,14 @@ export class UserController implements UserControllerInterface {
       });
     } catch (error: any) {
       if (error instanceof AppError) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ 
-            errors: error.message,
-            status: StatusCodes.BAD_REQUEST
-          });
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          errors: error.message,
+          status: StatusCodes.BAD_REQUEST,
+        });
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: error.message,
-        status: StatusCodes.INTERNAL_SERVER_ERROR
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
       });
     }
   }

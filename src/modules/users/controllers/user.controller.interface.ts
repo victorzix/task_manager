@@ -11,6 +11,11 @@ export interface UserControllerInterface {
     res: Response,
     next: NextFunction,
   ) => Promise<Response>;
+  getData: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<Response>;
   deleteUser: (
     req: Request,
     res: Response,

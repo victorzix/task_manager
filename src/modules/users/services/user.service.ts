@@ -4,7 +4,10 @@ import { type UpdateUserDTO, type CreateUserDTO, type User } from '../dtos';
 import { BadRequestError } from 'src/errors/bad-request-error';
 import { NotFoundError } from 'src/errors/not-found-error';
 import isObjEmpty from 'src/utils/isObjEmpty';
-import { UpdateUserSchema, UserSchema } from 'src/modules/users/schemas/user.schema';
+import {
+  UpdateUserSchema,
+  UserSchema,
+} from 'src/modules/users/schemas/user.schema';
 import { ForbiddenError } from 'src/errors/forbidden-error';
 import generateHashPassword from '../../../utils/password-hasher';
 import { InternalServerError } from 'src/errors/internal-server-error';
@@ -46,7 +49,7 @@ export class UserService implements UserServiceInterface {
     return user;
   }
 
-  async updateUser(id: string, dto: UpdateUserDTO) {
+  async updateUser(id: string, dto: UpdateUserDTO): Promise<User> {
     const isEmpty = isObjEmpty(dto);
     const validationErrors: String[] = [];
 
@@ -59,7 +62,7 @@ export class UserService implements UserServiceInterface {
     if (dto.email) {
       await this.handleUpdateEmail(dto.email);
     }
-    if(dto.password) {
+    if (dto.password) {
       dto.password = await generateHashPassword(dto.password);
     }
 
@@ -78,6 +81,16 @@ export class UserService implements UserServiceInterface {
 
     if (!user) {
       throw new NotFoundError('Could not find user');
+    }
+
+    return user;
+  }
+
+  async getData(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundError('User not found');
     }
 
     return user;

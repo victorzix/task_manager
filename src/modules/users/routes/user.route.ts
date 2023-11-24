@@ -10,6 +10,7 @@ export class UserRouter {
     this.routes.push(router.post('/', userController.createUser.bind(userController)))
     this.routes.push(router.patch('/', checkAuth, userController.updateUser.bind(userController)))
     this.routes.push(router.delete('/', checkAuth, userController.deleteUser.bind(userController)))
+    this.routes.push(router.get('/data', checkAuth, userController.getData.bind(userController)))
   }
 
   public getRoutes(): Router[] {
