@@ -25,7 +25,10 @@ export class AuthenticationController
       if (error instanceof AppError) {
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ errors: error.message });
+          .json({ 
+            status: StatusCodes.BAD_REQUEST,
+            errors: error.message 
+          });
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json('An error ocurred');
     }
