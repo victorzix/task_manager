@@ -15,6 +15,8 @@
  - [Install dependencies](#install-dependencies)
  - [Run the application](#run-the-application)
  - [Technologies](#technologies)
+ - [Documentation](#documentation)
+ - [Swagger](#swagger)
 
 ### Project Status
 <h4>🚧 In Progress 🚧</h4>
