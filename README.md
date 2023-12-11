@@ -1,7 +1,7 @@
 <h1 align="center">Task Manager</h1>
 
 ## Project Description
-<p>⏲️ An API that store products from a "storage"</p>
+<p>⏲️ An API to optmize your time and tasks</p>
 
 ## Content Table
 - [Project Description](#project-description)
